@@ -53,11 +53,11 @@ public class MemberDAO {
 		}
 		return tryLogin;
 	}
-	
+
 	// **회원가입 IDchk 메서드**
 	public boolean idChk(String newID) {
 		Boolean chk = false;
-		
+
 		try {
 			connDB();
 
@@ -83,7 +83,6 @@ public class MemberDAO {
 		return chk;
 	}
 
-
 	// **회원가입 메서드**
 	public void joinMembership(String mem_id, String mem_name, String mem_email, String mem_pwd) {
 		try {
@@ -96,6 +95,83 @@ public class MemberDAO {
 			e.printStackTrace();
 		}
 	}
+
+	// **ID 찾기 메서드**
+	public ArrayList<MemberVo> searchID(String name, String email) {
+		ArrayList<MemberVo> searchID = new ArrayList<MemberVo>();
+
+		try {
+			connDB();
+
+			String query = "SELECT * FROM MEMBERSHIP";
+			if (name != null) {
+				query += " where mem_name='" + name + "'";
+			}
+			System.out.println("SQL : " + query);
+
+			rs = stmt.executeQuery(query);
+			rs.last();
+			System.out.println("rs.getRow() : " + rs.getRow());
+
+			if (rs.getRow() == 0) {
+				System.out.println("0 row selected...");
+			} else {
+				System.out.println(rs.getRow() + " rows selected...");
+				rs.previous();
+				while (rs.next()) {
+					String mem_id = rs.getString("MEM_ID");
+					String mem_name = rs.getString("MEM_NAME");
+					String mem_email = rs.getString("MEM_EMAIL");
+					String mem_pwd = rs.getString("MEM_PWD");
+
+					MemberVo data = new MemberVo(mem_id, mem_name, mem_email, mem_pwd);
+					searchID.add(data);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return searchID;
+	}
+	
+	// **PWD 찾기 메서드**
+	public ArrayList<MemberVo> searchPwd(String id, String email) {
+		ArrayList<MemberVo> searchPwd = new ArrayList<MemberVo>();
+
+		try {
+			connDB();
+
+			String query = "SELECT * FROM MEMBERSHIP";
+			if (id != null) {
+				query += " where mem_id='" + id + "'";
+			}
+			System.out.println("SQL : " + query);
+
+			rs = stmt.executeQuery(query);
+			rs.last();
+			System.out.println("rs.getRow() : " + rs.getRow());
+
+			if (rs.getRow() == 0) {
+				System.out.println("0 row selected...");
+			} else {
+				System.out.println(rs.getRow() + " rows selected...");
+				rs.previous();
+				while (rs.next()) {
+					String mem_id = rs.getString("MEM_ID");
+					String mem_name = rs.getString("MEM_NAME");
+					String mem_email = rs.getString("MEM_EMAIL");
+					String mem_pwd = rs.getString("MEM_PWD");
+
+					MemberVo data = new MemberVo(mem_id, mem_name, mem_email, mem_pwd);
+					searchPwd.add(data);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return searchPwd;
+	}
+
 
 	public void connDB() {
 		try {

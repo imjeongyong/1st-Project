@@ -5,10 +5,8 @@ import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.FlowLayout;
 import java.awt.Frame;
-import java.awt.GridLayout;
 import java.awt.Label;
 import java.awt.Panel;
-import java.awt.TextArea;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,21 +15,21 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 public class MainUI extends WindowAdapter implements ActionListener {
-	private Frame firstFrame, joinFrame, searchFrame, mainFrame;
+	private Frame firstFrame, joinFrame, searchFrame;
 	private Button ff_bLogin, ff_bJoin, ff_bFind, bt2_bCancel, bt2_bLogin, jf_bJoin, jf_bLogin, jf_bIDchk, jf_bPWDchk,
 			d3_idchk_bok, d3_idchk_bno, d3_pwdchk_bok, d3_pwdchk_bno, d3_joinComplet_bok, sf_bFindID, sf_bFindPwd,
-			sf_bBack, sf_pID_bConfirm, sf_pID_bCancel, sf_pPwd_bConfirm, sf_pPwd_bCancel, d1_bOK, d2_bOK1, d2_bOK2,
-			mf_pM_bHome, mf_pM_bRecord, mf_pM_bStats, mf_pM_bSwing, mf_pM_bMap, mf_pH_bReser;
-	private Panel p_1stMain, fst_pBottom1, fst_pBottom2, sf_pFindID, sf_pFindPwd, mf_pMenu, mf_pHome, mf_pRecord,
-			mf_pStat, mf_pVideo, mf_pMap;
+			sf_bBack, sf_pID_bConfirm, sf_pID_bCancel, sf_pPwd_bConfirm, sf_pPwd_bCancel, d4_sf_id_bok, d4_sf_id_bno,
+			d4_sf_pwd_bok, d4_sf_pwd_bno, d1_bOK, d2_bOK1, d2_bOK2;
+	private Panel p_1stMain, fst_pBottom1, fst_pBottom2, sf_pFindID, sf_pFindPwd;
 	private Label bt2_lID, bt2_lPwd, jf_lJoin, jf_lID, jf_lName, jf_lEmail, jf_lPwd, jf_lRepwd, d3_idchk_lok,
 			d3_idchk_lno, d3_pwdchk_lok, d3_pwdchk_lno, d3_joinComplet_ljc, sf_pID_lName, sf_pID_lEmail, sf_pPwd_lID,
-			sf_pPwd_lEmail, d1_lMsg1, d2_lSuccess, d2_lFail, mf_pH_lTitle;
+			d4_sf_id_lok, d4_sf_id_lno, d4_sf_pwd_lok, d4_sf_pwd_lno, sf_pPwd_lEmail, d1_lMsg1, d2_lSuccess, d2_lFail;
 	private TextField bt2_tID, bt2_tPwd, jf_tID, jf_tName, jf_tEmail, jf_tPwd, jf_tRepwd, sf_pID_tName, sf_pID_tEmail,
 			sf_pPwd_tID, sf_pPwd_tEmail;
-	private TextArea mf_pH_taSum, mf_pH_taVideo;
 	private Dialog d1_LoginFail, d2_joinSuccess, d2_joinFail, d3_jf_idchk_ok, d3_jf_idchk_no, d3_jf_pwdchk_ok,
-			d3_jf_pwdchk_no, d3_jf_joinComplet;
+			d3_jf_pwdchk_no, d3_jf_joinComplet, d4_sf_id_ok, d4_sf_id_no, d4_sf_pwd_ok, d4_sf_pwd_no;
+
+	public String ID;
 
 	MainUI() {
 
@@ -269,6 +267,20 @@ public class MainUI extends WindowAdapter implements ActionListener {
 		sf_pID_tEmail.setLocation(0, 300);
 		sf_pID_tEmail.setBackground(Color.WHITE);
 
+		d4_sf_id_ok = new Dialog(searchFrame, false);
+		d4_sf_id_ok.setLayout(new FlowLayout());
+		d4_sf_id_ok.setSize(300, 200);
+		d4_sf_id_ok.setLocation(150, 300);
+		d4_sf_id_lok = new Label("d4_sf_id_lok");
+		d4_sf_id_bok = new Button("d4_sf_id_bok");
+
+		d4_sf_id_no = new Dialog(searchFrame, false);
+		d4_sf_id_no.setLayout(new FlowLayout());
+		d4_sf_id_no.setSize(300, 200);
+		d4_sf_id_no.setLocation(150, 300);
+		d4_sf_id_lno = new Label("d4_sf_id_lno");
+		d4_sf_id_bno = new Button("d4_sf_id_bno");
+
 		// 프레임 3 -> PASSWORD 찾기 패널
 		sf_pFindPwd = new Panel(null);
 		sf_pFindPwd.setSize(600, 600);
@@ -303,76 +315,19 @@ public class MainUI extends WindowAdapter implements ActionListener {
 		sf_pPwd_tEmail.setLocation(0, 300);
 		sf_pPwd_tEmail.setBackground(Color.WHITE);
 
-		// 프레임4 (로그인 완료 후 메인창)
-		mainFrame = new Frame("MainFrame");
-		mainFrame.setLayout(null);
-		mainFrame.setSize(700, 850);
-		mainFrame.setVisible(false);
+		d4_sf_pwd_ok = new Dialog(searchFrame, false);
+		d4_sf_pwd_ok.setLayout(new FlowLayout());
+		d4_sf_pwd_ok.setSize(300, 200);
+		d4_sf_pwd_ok.setLocation(150, 300);
+		d4_sf_pwd_lok = new Label("d4_sf_pwd_lok");
+		d4_sf_pwd_bok = new Button("d4_sf_pwd_bok");
 
-		// 프레임4 -> 홈 패널
-		mf_pHome = new Panel(null);
-		mf_pHome.setSize(700, 750);
-		mf_pHome.setLocation(0, 0);
-		mf_pHome.setBackground(Color.YELLOW);
-		mf_pHome.setVisible(true);
-
-		mf_pH_lTitle = new Label("Title", Label.CENTER);
-		mf_pH_lTitle.setSize(700, 50);
-		mf_pH_lTitle.setLocation(0, 30);
-
-		mf_pH_taSum = new TextArea("mf_pH_taSum \nmf_pH_taSum \nmf_pH_taSum", 10, 5);
-		mf_pH_taSum.setSize(700, 300);
-		mf_pH_taSum.setLocation(6, 80);
-
-		mf_pH_bReser = new Button("mf_pH_bReser");
-		mf_pH_bReser.setSize(700, 100);
-		mf_pH_bReser.setLocation(0, 380);
-
-		mf_pH_taVideo = new TextArea("Video Play display?????", 10, 5);
-		mf_pH_taVideo.setSize(700, 300);
-		mf_pH_taVideo.setLocation(0, 480);
-
-		// 프레임4 -> Record패널
-		mf_pRecord = new Panel(null);
-		mf_pRecord.setSize(700, 750);
-		mf_pRecord.setLocation(0, 0);
-		mf_pRecord.setBackground(Color.RED);
-		mf_pRecord.setVisible(false);
-
-		// 프레임4 -> Stat패널
-		mf_pStat = new Panel(null);
-		mf_pStat.setSize(700, 750);
-		mf_pStat.setLocation(0, 0);
-		mf_pStat.setBackground(Color.ORANGE);
-		mf_pStat.setVisible(false);
-
-		// 프레임4 -> Video패널
-		mf_pVideo = new Panel(null);
-		mf_pVideo.setSize(700, 750);
-		mf_pVideo.setLocation(0, 0);
-		mf_pVideo.setBackground(Color.PINK);
-		mf_pVideo.setVisible(false);
-
-		// 프레임4 -> Map패널
-		mf_pMap = new Panel(null);
-		mf_pMap.setSize(700, 750);
-		mf_pMap.setLocation(0, 0);
-		mf_pMap.setBackground(Color.YELLOW);
-		mf_pMap.setVisible(false);
-
-		// 프레임4 -> 하단 메뉴바
-		mf_pMenu = new Panel();
-		mf_pMenu.setLayout(new GridLayout(1, 5));
-		mf_pMenu.setSize(700, 100);
-		mf_pMenu.setLocation(0, 750);
-		mf_pMenu.setBackground(Color.GREEN);
-		mf_pMenu.setVisible(true);
-
-		mf_pM_bHome = new Button("mf_pM_bHome");
-		mf_pM_bRecord = new Button("mf_pM_bRecord");
-		mf_pM_bStats = new Button("mf_pM_bStats");
-		mf_pM_bSwing = new Button("mf_pM_bSwing");
-		mf_pM_bMap = new Button("mf_pM_bMap");
+		d4_sf_pwd_no = new Dialog(searchFrame, false);
+		d4_sf_pwd_no.setLayout(new FlowLayout());
+		d4_sf_pwd_no.setSize(300, 200);
+		d4_sf_pwd_no.setLocation(150, 300);
+		d4_sf_pwd_lno = new Label("d4_sf_pwd_lno");
+		d4_sf_pwd_bno = new Button("d4_sf_pwd_bno");
 	}
 
 	public void startFrame() {
@@ -471,6 +426,16 @@ public class MainUI extends WindowAdapter implements ActionListener {
 		sf_pFindPwd.add(sf_pPwd_lEmail);
 		sf_pFindPwd.add(sf_pPwd_tEmail);
 
+		d4_sf_id_ok.add(d4_sf_id_lok);
+		d4_sf_id_ok.add(d4_sf_id_bok);
+		d4_sf_id_no.add(d4_sf_id_lno);
+		d4_sf_id_no.add(d4_sf_id_bno);
+
+		d4_sf_pwd_ok.add(d4_sf_pwd_lok);
+		d4_sf_pwd_ok.add(d4_sf_pwd_bok);
+		d4_sf_pwd_no.add(d4_sf_pwd_lno);
+		d4_sf_pwd_no.add(d4_sf_pwd_bno);
+
 		sf_bFindID.addActionListener(this);
 		sf_bFindPwd.addActionListener(this);
 		sf_bBack.addActionListener(this);
@@ -478,33 +443,10 @@ public class MainUI extends WindowAdapter implements ActionListener {
 		sf_pID_bCancel.addActionListener(this);
 		sf_pPwd_bConfirm.addActionListener(this);
 		sf_pPwd_bCancel.addActionListener(this);
-
-		mainFrame.addWindowListener(this);
-
-		mainFrame.add(mf_pMenu);
-		mainFrame.add(mf_pHome);
-		mainFrame.add(mf_pRecord);
-		mainFrame.add(mf_pStat);
-		mainFrame.add(mf_pVideo);
-		mainFrame.add(mf_pMap);
-
-		mf_pMenu.add(mf_pM_bHome);
-		mf_pMenu.add(mf_pM_bRecord);
-		mf_pMenu.add(mf_pM_bStats);
-		mf_pMenu.add(mf_pM_bSwing);
-		mf_pMenu.add(mf_pM_bMap);
-
-		mf_pHome.add(mf_pH_lTitle);
-		mf_pHome.add(mf_pH_taSum);
-		mf_pHome.add(mf_pH_bReser);
-		mf_pHome.add(mf_pH_taVideo);
-
-		mf_pM_bHome.addActionListener(this);
-		mf_pM_bRecord.addActionListener(this);
-		mf_pM_bStats.addActionListener(this);
-		mf_pM_bSwing.addActionListener(this);
-		mf_pM_bMap.addActionListener(this);
-		mf_pH_bReser.addActionListener(this);
+		d4_sf_id_bok.addActionListener(this);
+		d4_sf_id_bno.addActionListener(this);
+		d4_sf_pwd_bok.addActionListener(this);
+		d4_sf_pwd_bno.addActionListener(this);
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -530,7 +472,8 @@ public class MainUI extends WindowAdapter implements ActionListener {
 			}
 			if (bt2_tPwd.getText().equals(mem_pwd)) {
 				firstFrame.setVisible(false);
-				mainFrame.setVisible(true);
+				ID = bt2_tID.getText();
+				new MainFrame(ID);
 			} else {
 				d1_LoginFail.setVisible(true);
 			}
@@ -564,13 +507,19 @@ public class MainUI extends WindowAdapter implements ActionListener {
 			String new_name = jf_tName.getText();
 			String new_email = jf_tEmail.getText();
 			String new_pwd = jf_tPwd.getText();
-			dao.joinMembership(new_id, new_name, new_email, new_pwd);
-			d3_jf_joinComplet.setVisible(true);
-			jf_tID.setText("");
-			jf_tName.setText("");
-			jf_tEmail.setText("");
-			jf_tPwd.setText("");
-			jf_tRepwd.setText("");
+			try {
+				dao.joinMembership(new_id, new_name, new_email, new_pwd);
+				d3_jf_joinComplet.setVisible(true);
+				jf_tID.setText("");
+				jf_tName.setText("");
+				jf_tEmail.setText("");
+				jf_tPwd.setText("");
+				jf_tRepwd.setText("");
+
+				joinFrame.setVisible(false);
+			} catch (Exception e1) {
+				System.out.println("re try!!");
+			}
 		}
 		if (e.getActionCommand().equals(jf_bLogin.getLabel())) {
 			System.out.println("Login");
@@ -587,15 +536,53 @@ public class MainUI extends WindowAdapter implements ActionListener {
 		if (e.getActionCommand().equals(sf_bBack.getLabel())) {
 			searchFrame.setVisible(false);
 		}
-		if (e.getActionCommand().equals(sf_pID_bConfirm.getLabel())) {
-			System.out.println("Confirm1");
+		if (e.getActionCommand().equals(sf_pID_bConfirm.getLabel())) { // ** ID 찾기 버튼 **
+			String name = sf_pID_tName.getText();
+			String email = sf_pID_tEmail.getText();
+			ArrayList<MemberVo> list = dao.searchID(name, email);
+			String mem_id = "";
+			String mem_email = "";
+			for (int i = 0; i < list.size(); i++) {
+				MemberVo data = (MemberVo) list.get(i);
+				mem_id = data.getMem_id();
+				mem_email = data.getMem_email();
+			}
+
+			if (email.equals(mem_email)) {
+				System.out.println(mem_id);
+				d4_sf_id_lok.setText("ID : " + mem_id);
+				d4_sf_id_ok.setVisible(true);
+			} else {
+				System.out.println("no ID");
+				d4_sf_id_no.setVisible(true);
+			}
 		}
 		if (e.getActionCommand().equals(sf_pID_bCancel.getLabel())) {
 			sf_pFindID.setVisible(false);
 			sf_pFindPwd.setVisible(false);
 		}
-		if (e.getActionCommand().equals(sf_pPwd_bConfirm.getLabel())) {
-			System.out.println("Confirm2");
+
+		if (e.getActionCommand().equals(sf_pPwd_bConfirm.getLabel())) { // ** Password 찾기 버튼 **
+			String id = sf_pPwd_tID.getText();
+			String email = sf_pPwd_tEmail.getText();
+			String mem_email = "";
+			String mem_pwd = "";
+			ArrayList<MemberVo> list = dao.searchPwd(id, email);
+			for (int i = 0; i < list.size(); i++) {
+				MemberVo data = (MemberVo) list.get(i);
+				mem_pwd = data.getMem_pwd();
+				mem_email = data.getMem_email();
+			}
+
+			if (email.equals(mem_email)) {
+				System.out.println(mem_pwd);
+				d4_sf_pwd_lok.setText("Password : " + mem_pwd);
+				d4_sf_pwd_ok.setVisible(true);
+			} else {
+				System.out.println("chk id or email");
+				d4_sf_pwd_no.setVisible(true);
+			}
+
 		}
 		if (e.getActionCommand().equals(sf_pPwd_bCancel.getLabel())) {
 			sf_pFindID.setVisible(false);
@@ -608,44 +595,6 @@ public class MainUI extends WindowAdapter implements ActionListener {
 		}
 		if (e.getActionCommand().equals(d2_bOK2.getLabel())) {
 			d2_joinFail.dispose();
-		}
-		if (e.getActionCommand().equals(mf_pH_bReser.getLabel())) {
-			System.out.println("reservation!!");
-		}
-		if (e.getActionCommand().equals(mf_pM_bHome.getLabel())) {
-			mf_pHome.setVisible(true);
-			mf_pRecord.setVisible(false);
-			mf_pStat.setVisible(false);
-			mf_pVideo.setVisible(false);
-			mf_pMap.setVisible(false);
-		}
-		if (e.getActionCommand().equals(mf_pM_bRecord.getLabel())) {
-			mf_pHome.setVisible(false);
-			mf_pRecord.setVisible(true);
-			mf_pStat.setVisible(false);
-			mf_pVideo.setVisible(false);
-			mf_pMap.setVisible(false);
-		}
-		if (e.getActionCommand().equals(mf_pM_bStats.getLabel())) {
-			mf_pHome.setVisible(false);
-			mf_pRecord.setVisible(false);
-			mf_pStat.setVisible(true);
-			mf_pVideo.setVisible(false);
-			mf_pMap.setVisible(false);
-		}
-		if (e.getActionCommand().equals(mf_pM_bSwing.getLabel())) {
-			mf_pHome.setVisible(false);
-			mf_pRecord.setVisible(false);
-			mf_pStat.setVisible(false);
-			mf_pVideo.setVisible(true);
-			mf_pMap.setVisible(false);
-		}
-		if (e.getActionCommand().equals(mf_pM_bMap.getLabel())) {
-			mf_pHome.setVisible(false);
-			mf_pRecord.setVisible(false);
-			mf_pStat.setVisible(false);
-			mf_pVideo.setVisible(false);
-			mf_pMap.setVisible(true);
 		}
 		if (e.getActionCommand().equals(d3_idchk_bok.getLabel())) {
 			d3_jf_idchk_ok.dispose();
@@ -672,9 +621,27 @@ public class MainUI extends WindowAdapter implements ActionListener {
 		if (e.getActionCommand().equals(d3_pwdchk_bno.getLabel())) {
 			d3_jf_pwdchk_no.dispose();
 		}
+
 		if (e.getActionCommand().equals(d3_joinComplet_bok.getLabel())) {
 			d3_jf_joinComplet.dispose();
 		}
+
+		if (e.getActionCommand().equals(d4_sf_id_bok.getLabel())) {
+			d4_sf_id_ok.dispose();
+		}
+
+		if (e.getActionCommand().equals(d4_sf_id_bno.getLabel())) {
+			d4_sf_id_no.dispose();
+		}
+
+		if (e.getActionCommand().equals(d4_sf_pwd_bok.getLabel())) {
+			d4_sf_pwd_ok.dispose();
+		}
+
+		if (e.getActionCommand().equals(d4_sf_pwd_bno.getLabel())) {
+			d4_sf_pwd_no.dispose();
+		}
+
 	}
 
 	public void windowClosing(WindowEvent e) {
