@@ -14,9 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
-public class MainFrame implements ActionListener {
-	MainUI main = new MainUI();
-	Tab_main tab_main_panel = new Tab_main();
+public class MainFrame extends FirstFrame implements ActionListener {
 	Tab_data tab_data_panel = new Tab_data();
 	JFrame mainFrame;
 	JButton mf_b_logout;
@@ -25,7 +23,7 @@ public class MainFrame implements ActionListener {
 	JTabbedPane tabbedPane;
 	JScrollPane sp;
 
-	MainFrame(String ID) {
+	MainFrame(String id, String nickname, String pwd) {
 
 		mainFrame = new JFrame();
 		mainFrame.setLayout(new BorderLayout());
@@ -35,11 +33,10 @@ public class MainFrame implements ActionListener {
 
 		mf_p_state = new JPanel();
 		mf_p_state.setSize(750, 50);
-		mf_p_state.setBackground(Color.pink);
 		mf_p_state.setLayout(new BorderLayout());
 
 		mf_l_loginID = new JLabel();
-		mf_l_loginID.setText(ID + " login...");
+		mf_l_loginID.setText(nickname + " 님이 로그인 중입니다...");
 
 		mf_b_logout = new JButton();
 		mf_b_logout.setText("logout");
@@ -61,6 +58,8 @@ public class MainFrame implements ActionListener {
 		tab_myInfo = new JPanel();
 		tab_myInfo.setBackground(Color.cyan);
 
+		Tab_main tab_main_panel = new Tab_main(id, nickname, pwd);
+
 		tabbedPane = new JTabbedPane();
 		tabbedPane.addTab("main", tab_main_panel.tab_main_p);
 		tabbedPane.addTab("enter", sp);
@@ -69,16 +68,9 @@ public class MainFrame implements ActionListener {
 		tabbedPane.addTab("five", tab_myInfo);
 		tabbedPane.setFocusable(false);
 
-		tab_enter.add(new Tab_enter(1).p_box);
-		tab_enter.add(new Tab_enter(2).p_box);
-		tab_enter.add(new Tab_enter(3).p_box);
-		tab_enter.add(new Tab_enter(4).p_box);
-		tab_enter.add(new Tab_enter(5).p_box);
-		tab_enter.add(new Tab_enter(6).p_box);
-		tab_enter.add(new Tab_enter(7).p_box);
-		tab_enter.add(new Tab_enter(8).p_box);
-		tab_enter.add(new Tab_enter(9).p_box);
-		tab_enter.add(new Tab_enter(10).p_box);
+		for (int i = 1; i <= 10; i++) {
+			tab_enter.add(new Tab_enter(i, id, nickname).p_box);
+		}
 
 		mainFrame.add(mf_p_state, BorderLayout.SOUTH);
 		mainFrame.add(tabbedPane, BorderLayout.CENTER);
@@ -87,15 +79,12 @@ public class MainFrame implements ActionListener {
 		mf_p_state.add(mf_b_logout, BorderLayout.EAST);
 
 		mainFrame.setVisible(true);
+
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == mf_b_logout) {
 			mainFrame.setVisible(false);
 		}
-	}
-
-	public static void main(String[] args) {
-		new MainFrame("KimPro");
 	}
 }

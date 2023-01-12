@@ -5,8 +5,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,6 +17,7 @@ import javax.swing.JTextField;
 
 public class FirstFrame implements ActionListener {
 
+	GreenDAO dao = new GreenDAO();
 	JFrame ff_f_first;
 	JPanel ff_p_background1, ff_p_background2;
 	JPanel[] cards;
@@ -25,6 +28,9 @@ public class FirstFrame implements ActionListener {
 	JLabel[] login_labels;
 	JTextField login_tfID;
 	JPasswordField login_pfPWD;
+	JDialog notice;
+	JButton b_notice;
+	JLabel l_notice;
 
 	FirstFrame() {
 
@@ -122,31 +128,85 @@ public class FirstFrame implements ActionListener {
 
 		cardLayout.show(ff_p_background2, "first");
 
+		l_notice = new JLabel();
+		l_notice.setBounds(20, 30, 250, 60);
+		l_notice.setFont(bt_font);
+
+		b_notice = new JButton();
+		b_notice.setText("확인");
+		b_notice.setBounds(150, 100, 70, 50);
+		b_notice.setFont(bt_font);
+		b_notice.addActionListener(this);
+
+		notice = new JDialog(ff_f_first, false);
+		notice.setLayout(null);
+		notice.setBounds(300, 200, 300, 200);
+		notice.add(b_notice);
+		notice.add(l_notice);
+
+		dao.connDB();
+	}
+
+	public void startFrame() {
 		ff_f_first.setVisible(true);
 
 	}
 
 	public static void main(String[] args) {
-		new FirstFrame();
+		FirstFrame ff = new FirstFrame();
+		ff.startFrame();
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		System.out.println("click");
-		if (e.getSource() == login_bts[0]) {
+		if (e.getSource() == login_bts[0]) { // **카드레이아웃 로그인 화면 버튼**
 			cardLayout.show(ff_p_background2, "login");
 		}
-		if (e.getSource() == login_bts[1]) {
+		if (e.getSource() == login_bts[1]) { // **회원가입 화면 버튼**
 			new JoinFrame();
 			ff_f_first.setVisible(false);
 		}
-		if (e.getSource() == login_bts[2]) {
+		if (e.getSource() == login_bts[2]) { // **아이디/비밀번호 찾기 화면 버튼**
 			new SearchFrame();
 			ff_f_first.setVisible(false);
 		}
 
-		if (e.getSource() == login_bts2[1]) {
+		if (e.getSource() == login_bts2[1]) { // **카드레이아웃 첫 화면 버튼**
 			cardLayout.show(ff_p_background2, "first");
 		}
 
+		if (e.getSource() == login_bts2[0]) { // **로그인 하기 버튼**
+			String id = login_tfID.getText();
+			String nickname = "";
+			String pwd = String.valueOf(login_pfPWD.getPassword());
+
+			ArrayList<MemberVO> list = dao.tryLogin(id, pwd);
+			String password = "";
+
+			for (int i = 0; i < list.size(); i++) {
+				MemberVO data = (MemberVO) list.get(i);
+				nickname = data.getMem_nickname();
+				password = data.getMem_pwd();
+			}
+			if (id.length() == 0) {
+				notice.setVisible(true);
+				l_notice.setText("아이디를 입력하세요.");
+			} else if (pwd.length() == 0) {
+				notice.setVisible(true);
+				l_notice.setText("비밀번호를 입력하세요.");
+			} else if (pwd.equals(password)) {
+				new MainFrame(id, nickname, pwd);
+				login_tfID.setText("");
+				login_pfPWD.setText("");
+			} else {
+				notice.setVisible(true);
+				l_notice.setText("로그인 실패");
+				login_tfID.setText("");
+				login_pfPWD.setText("");
+			}
+		}
+
+		if (e.getSource() == b_notice) {
+			notice.dispose();
+		}
 	}
 }

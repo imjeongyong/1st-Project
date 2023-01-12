@@ -2,8 +2,10 @@ package greenAcademiGolf;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -12,12 +14,14 @@ import javax.swing.JTextField;
 public class SearchFrame extends FirstFrame {
 
 	JFrame sf_f_find;
-	JPanel sf_p_btPanel;
-	JButton[] sf_f_bts1, sf_f_bts2, sf_f_bts3, sf_cards_bts;
-	JPanel sf_p_panel;
+	JPanel sf_p_btPanel, sf_p_panel;
 	JPanel[] sf_p_cards;
+	JButton[] sf_f_bts1, sf_f_bts2, sf_f_bts3, sf_cards_bts;
+	JButton b_notice;
 	JLabel[] sf_label_cards;
+	JLabel l_notice;
 	JTextField[] sf_tf_cards;
+	JDialog notice;
 
 	SearchFrame() {
 		sf_f_find = new JFrame("아이디 / 비밀번호 찾기");
@@ -77,7 +81,7 @@ public class SearchFrame extends FirstFrame {
 		sf_p_cards[1].add(sf_label_cards[2]);
 		sf_p_cards[1].add(sf_label_cards[3]);
 
-		sf_tf_cards = new JTextField[6];
+		sf_tf_cards = new JTextField[4];
 		for (int i = 0; i < sf_tf_cards.length; i++) {
 			sf_tf_cards[i] = new JTextField();
 			sf_tf_cards[i].setSize(250, 60);
@@ -86,23 +90,20 @@ public class SearchFrame extends FirstFrame {
 
 		sf_tf_cards[0].setLocation(140, 20);
 		sf_tf_cards[1].setLocation(140, 120);
-		sf_tf_cards[2].setLocation(140, 220);
 		sf_p_cards[0].add(sf_tf_cards[0]);
 		sf_p_cards[0].add(sf_tf_cards[1]);
-		sf_p_cards[0].add(sf_tf_cards[2]);
 
-		sf_tf_cards[3].setLocation(140, 20);
-		sf_tf_cards[4].setLocation(140, 120);
-		sf_tf_cards[5].setLocation(140, 220);
+		sf_tf_cards[2].setLocation(140, 20);
+		sf_tf_cards[3].setLocation(140, 120);
+		sf_p_cards[1].add(sf_tf_cards[2]);
 		sf_p_cards[1].add(sf_tf_cards[3]);
-		sf_p_cards[1].add(sf_tf_cards[4]);
-		sf_p_cards[1].add(sf_tf_cards[5]);
 
 		sf_cards_bts = new JButton[4];
 		String[] btsName = { "확인", "취소", "확인", "취소" };
 		for (int i = 0; i < sf_cards_bts.length; i++) {
 			sf_cards_bts[i] = new JButton();
 			sf_cards_bts[i].setText(btsName[i]);
+			sf_cards_bts[i].addActionListener(this);
 			sf_cards_bts[i].setSize(140, 60);
 			sf_cards_bts[i].setFont(bt_font);
 		}
@@ -117,24 +118,124 @@ public class SearchFrame extends FirstFrame {
 		sf_p_cards[1].add(sf_cards_bts[2]);
 		sf_p_cards[1].add(sf_cards_bts[3]);
 
+		l_notice = new JLabel();
+		l_notice.setBounds(20, 30, 250, 60);
+		l_notice.setFont(bt_font);
+
+		b_notice = new JButton();
+		b_notice.setText("확인");
+		b_notice.setBounds(150, 100, 70, 50);
+		b_notice.setFont(bt_font);
+		b_notice.addActionListener(this);
+
+		notice = new JDialog(sf_f_find, false);
+		notice.setLayout(null);
+		notice.setBounds(300, 200, 300, 200);
+		notice.add(b_notice);
+		notice.add(l_notice);
+
 		sf_f_find.add(sf_p_panel);
 		sf_f_find.add(sf_p_btPanel);
 		sf_f_find.setVisible(true);
 
+		dao.connDB();
+
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == sf_f_bts1[0]) { // **ID 찾기 버튼**
+		if (e.getSource() == sf_f_bts1[0]) { // **ID 찾기 창 버튼**
 			cardLayout.show(sf_p_panel, "sf_card_ID");
 		}
 
-		if (e.getSource() == sf_f_bts1[1]) { // **PWD 찾기 버튼**
+		if (e.getSource() == sf_f_bts1[1]) { // **PWD 찾기 창 버튼**
 			cardLayout.show(sf_p_panel, "sf_card_PWD");
 		}
 
-		if (e.getSource() == sf_f_bts1[2]) { // **돌아가기 버튼**
+		if (e.getSource() == sf_f_bts1[2] || e.getSource() == sf_cards_bts[1] || e.getSource() == sf_cards_bts[3]) { // **돌아가기,
+																														// 취소
+																														// 버튼**
 			sf_f_find.setVisible(false);
 			new FirstFrame();
+		}
+
+		if (e.getSource() == sf_cards_bts[0]) { // **ID 찾기 버튼**
+			String nickname = sf_tf_cards[0].getText();
+			String email = sf_tf_cards[1].getText();
+
+			if (nickname.length() == 0) {
+				notice.setVisible(true);
+				l_notice.setText("닉네임을 입력해주세요.");
+			} else if (email.length() == 0) {
+				notice.setVisible(true);
+				l_notice.setText("이메일 주소를 입력해주세요.");
+			} else if (email.contains("@") == false) {
+				notice.setVisible(true);
+				l_notice.setText("이메일 주소를 다시 입력해주세요.");
+			} else {
+
+				ArrayList<MemberVO> list = dao.searchID(nickname, email);
+				String mem_id = "";
+				String mem_email = "";
+
+				for (int i = 0; i < list.size(); i++) {
+					MemberVO data = (MemberVO) list.get(i);
+					mem_id = data.getMem_id();
+					mem_email = data.getMem_email();
+				}
+
+				if (email.equals(mem_email)) {
+					notice.setVisible(true);
+					l_notice.setText("아이디 : " + mem_id);
+					for (int i = 0; i < sf_tf_cards.length; i++) {
+						sf_tf_cards[i].setText("");
+					}
+				} else {
+					notice.setVisible(true);
+					l_notice.setText("다시 입력해주세요.");
+				}
+			}
+		}
+
+		if (e.getSource() == sf_cards_bts[2]) { // **PWD 찾기 버튼**
+			String id = sf_tf_cards[2].getText();
+			String email = sf_tf_cards[3].getText();
+
+			if (id.length() == 0) {
+				notice.setVisible(true);
+				l_notice.setText("아이디를 입력해주세요.");
+			} else if (email.length() == 0) {
+				notice.setVisible(true);
+				l_notice.setText("이메일 주소를 입력해주세요.");
+			} else if (email.contains("@") == false) {
+				notice.setVisible(true);
+				l_notice.setText("이메일 주소를 다시 입력해주세요.");
+			} else {
+
+				ArrayList<MemberVO> list = dao.searchPwd(id, email);
+				String mem_pwd = "";
+				String mem_email = "";
+
+				for (int i = 0; i < list.size(); i++) {
+					MemberVO data = (MemberVO) list.get(i);
+					mem_pwd = data.getMem_id();
+					mem_email = data.getMem_email();
+				}
+
+				if (email.equals(mem_email)) {
+					notice.setVisible(true);
+					l_notice.setText("비밀번호 : " + mem_pwd);
+					for (int i = 0; i < sf_tf_cards.length; i++) {
+						sf_tf_cards[i].setText("");
+					}
+				} else {
+					notice.setVisible(true);
+					l_notice.setText("다시 입력해주세요.");
+				}
+			}
+		}
+
+		if (e.getSource() == b_notice) {
+			notice.dispose();
 		}
 	}
 }
