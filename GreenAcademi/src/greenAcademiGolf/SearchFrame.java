@@ -1,5 +1,6 @@
 package greenAcademiGolf;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -33,6 +34,8 @@ public class SearchFrame extends FirstFrame {
 		sf_p_btPanel = new JPanel();
 		sf_p_btPanel.setLayout(new FlowLayout());
 		sf_p_btPanel.setBounds(0, 0, 590, 60);
+		sf_p_btPanel.setBackground(Color.white);
+		sf_p_btPanel.setOpaque(true);
 
 		sf_f_bts1 = new JButton[3];
 		String[] bts1Txt = { "아이디 찾기", "비밀번호 찾기", "돌아가기" };
@@ -41,6 +44,8 @@ public class SearchFrame extends FirstFrame {
 			sf_f_bts1[i].setText(bts1Txt[i]);
 			sf_f_bts1[i].setSize(150, 60);
 			sf_f_bts1[i].setFont(bt_font);
+			sf_f_bts1[i].setBackground(bgColor);
+			sf_f_bts1[i].setForeground(Color.white);
 			sf_f_bts1[i].addActionListener(this);
 
 			sf_p_btPanel.add(sf_f_bts1[i]);
@@ -57,6 +62,7 @@ public class SearchFrame extends FirstFrame {
 			sf_p_cards[i] = new JPanel();
 			sf_p_cards[i].setLayout(null);
 			sf_p_cards[i].setBounds(0, 60, 590, 680);
+			sf_p_cards[i].setBackground(Color.white);
 
 			sf_p_panel.add(sf_p_cards[i], cardName[i]);
 		}
@@ -105,6 +111,8 @@ public class SearchFrame extends FirstFrame {
 			sf_cards_bts[i].setText(btsName[i]);
 			sf_cards_bts[i].addActionListener(this);
 			sf_cards_bts[i].setSize(140, 60);
+			sf_cards_bts[i].setBackground(bgColor);
+			sf_cards_bts[i].setForeground(Color.white);
 			sf_cards_bts[i].setFont(bt_font);
 		}
 
@@ -154,8 +162,8 @@ public class SearchFrame extends FirstFrame {
 		if (e.getSource() == sf_f_bts1[2] || e.getSource() == sf_cards_bts[1] || e.getSource() == sf_cards_bts[3]) { // **돌아가기,
 																														// 취소
 																														// 버튼**
-			sf_f_find.setVisible(false);
-			new FirstFrame();
+			sf_f_find.dispose();
+			new FirstFrame().startFrame();
 		}
 
 		if (e.getSource() == sf_cards_bts[0]) { // **ID 찾기 버튼**
@@ -217,7 +225,7 @@ public class SearchFrame extends FirstFrame {
 
 				for (int i = 0; i < list.size(); i++) {
 					MemberVO data = (MemberVO) list.get(i);
-					mem_pwd = data.getMem_id();
+					mem_pwd = data.getMem_pwd();
 					mem_email = data.getMem_email();
 				}
 

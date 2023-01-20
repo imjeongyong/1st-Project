@@ -1,5 +1,6 @@
 package greenAcademiGolf;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 
@@ -28,11 +29,14 @@ public class JoinFrame extends FirstFrame {
 		jf_f_join.setSize(590, 740);
 		jf_f_join.setResizable(false);
 		jf_f_join.setLayout(null);
+		jf_f_join.getContentPane().setBackground(Color.white);
 
 		jf_f_labelTitle = new JLabel();
 		jf_f_labelTitle.setText("회원가입");
 		jf_f_labelTitle.setBounds(0, 0, 590, 100);
 		jf_f_labelTitle.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+		jf_f_labelTitle.setBackground(Color.white);
+		jf_f_labelTitle.setOpaque(true);
 		jf_f_labelTitle.setHorizontalAlignment(JLabel.CENTER);
 
 		jf_f_labels = new JLabel[5];
@@ -42,6 +46,8 @@ public class JoinFrame extends FirstFrame {
 			jf_f_labels[i].setText(labelsTxt[i]);
 			jf_f_labels[i].setFont(bt_font);
 			jf_f_labels[i].setSize(100, 60);
+			jf_f_labels[i].setBackground(Color.white);
+			jf_f_labels[i].setOpaque(true);
 			jf_f_labels[i].setHorizontalAlignment(JLabel.RIGHT);
 
 			jf_f_join.add(jf_f_labels[i]);
@@ -88,6 +94,8 @@ public class JoinFrame extends FirstFrame {
 			jf_f_bts[i].setText(btsTxt[i]);
 			jf_f_bts[i].setFont(bt_font);
 			jf_f_bts[i].setSize(140, 60);
+			jf_f_bts[i].setBackground(bgColor);
+			jf_f_bts[i].setForeground(Color.white);
 			jf_f_bts[i].addActionListener(this);
 
 			jf_f_join.add(jf_f_bts[i]);
@@ -189,6 +197,8 @@ public class JoinFrame extends FirstFrame {
 				try {
 					dao.joinMembership(join_ID, join_NN, join_Email, join_PWD);
 					dao.ins_record1(join_ID, join_NN);
+					dao.createData(join_ID);
+					dao.addData(join_ID);
 					notice.setVisible(true);
 					l_notice.setText("아이디가 생성되었습니다.");
 					for (int i = 0; i < jf_f_tfs.length; i++) {
@@ -203,11 +213,9 @@ public class JoinFrame extends FirstFrame {
 				}
 			}
 		}
-		if (e.getSource() == jf_f_bts[3])
-
-		{ // **로그인창 이동 버튼**
-			jf_f_join.setVisible(false);
-			new FirstFrame();
+		if (e.getSource() == jf_f_bts[3]) { // **로그인창 이동 버튼**
+			jf_f_join.dispose();
+			new FirstFrame().startFrame();
 		}
 	}
 }

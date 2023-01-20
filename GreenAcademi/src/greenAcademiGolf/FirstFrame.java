@@ -1,5 +1,6 @@
 package greenAcademiGolf;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -7,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -46,8 +48,21 @@ public class FirstFrame implements ActionListener {
 		ff_f_first.setResizable(false);
 		ff_f_first.setLayout(null);
 
+		ImageIcon golpu = new ImageIcon("golpu.png");
+
 		ff_p_background1 = new JPanel(); // ** 메인 패널 **
+		ff_p_background1.setBackground(Color.white);
 		ff_p_background1.setBounds(0, 0, 590, 500);
+		ff_p_background1.setLayout(null);
+
+		JLabel l_golpu = new JLabel();
+		l_golpu.setBounds(90, 30, 410, 440);
+		l_golpu.setBackground(Color.white);
+		l_golpu.setIcon(golpu);
+
+		l_golpu.setOpaque(true);
+
+		ff_p_background1.add(l_golpu, BorderLayout.CENTER);
 
 		cardLayout = new CardLayout(); // ** 카드 패널 **
 
@@ -60,6 +75,7 @@ public class FirstFrame implements ActionListener {
 		String[] card_name = { "first", "login" };
 		for (int i = 0; i < cards.length; i++) {
 			cards[i] = new JPanel();
+			cards[i].setBackground(Color.white);
 			cards[i].setLayout(null);
 			cards[i].setBounds(0, 500, 590, 240);
 
@@ -73,6 +89,8 @@ public class FirstFrame implements ActionListener {
 			login_bts[i] = new JButton();
 			login_bts[i].setFocusable(false);
 			login_bts[i].setText(btName[i]);
+			login_bts[i].setForeground(Color.white);
+			login_bts[i].setBackground(bgColor);
 			login_bts[i].setFont(bt_font);
 			login_bts[i].addActionListener(this);
 
@@ -90,6 +108,7 @@ public class FirstFrame implements ActionListener {
 			login_labels[i].setText(labelName[i]);
 			login_labels[i].setHorizontalAlignment(JLabel.RIGHT);
 			login_labels[i].setFont(bt_font);
+			login_labels[i].setBackground(Color.white);
 			login_labels[i].setOpaque(true);
 
 			cards[1].add(login_labels[i]);
@@ -115,6 +134,8 @@ public class FirstFrame implements ActionListener {
 			login_bts2[i].setText(bts2Name[i]);
 			login_bts2[i].setFocusable(false);
 			login_bts2[i].setFont(bt_font);
+			login_bts2[i].setBackground(bgColor);
+			login_bts2[i].setForeground(Color.white);
 			login_bts2[i].addActionListener(this);
 
 			cards[1].add(login_bts2[i]);
@@ -150,11 +171,6 @@ public class FirstFrame implements ActionListener {
 	public void startFrame() {
 		ff_f_first.setVisible(true);
 
-	}
-
-	public static void main(String[] args) {
-		FirstFrame ff = new FirstFrame();
-		ff.startFrame();
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -194,9 +210,9 @@ public class FirstFrame implements ActionListener {
 				notice.setVisible(true);
 				l_notice.setText("비밀번호를 입력하세요.");
 			} else if (pwd.equals(password)) {
-				new MainFrame(id, nickname, pwd);
 				login_tfID.setText("");
 				login_pfPWD.setText("");
+				new MainFrame(id).startFrame();
 			} else {
 				notice.setVisible(true);
 				l_notice.setText("로그인 실패");
